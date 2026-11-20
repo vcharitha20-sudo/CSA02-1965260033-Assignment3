@@ -1,0 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+void merge_desc(const int a[],int na,const int b[],int nb,int out[],long long *cmp){int i=0,j=0,k=0;*cmp=0;while(i<na&&j<nb){(*cmp)++;if(a[i]>=b[j])out[k++]=a[i++];else out[k++]=b[j++];}while(i<na)out[k++]=a[i++];while(j<nb)out[k++]=b[j++];}
+int descending(const int a[],int n){int i;for(i=1;i<n;i++)if(a[i]>a[i-1])return 0;return 1;}
+int main(void){int a[]={98,91,85,72},b[]={95,91,80},out[7],i,n;long long cmp;int *bigA,*bigB,*bigOut;int sizes[]={1000,10000},t;clock_t start;merge_desc(a,4,b,3,out,&cmp);printf("Merged: ");for(i=0;i<7;i++)printf("%d ",out[i]);printf("\nComparisons: %lld, sorted: %s\n",cmp,descending(out,7)?"yes":"no");merge_desc(a,4,b,0,out,&cmp);printf("Empty B: ");for(i=0;i<4;i++)printf("%d ",out[i]);printf("\n");for(t=0;t<2;t++){n=sizes[t];bigA=(int*)malloc((size_t)n*sizeof(int));bigB=(int*)malloc((size_t)n*sizeof(int));bigOut=(int*)malloc((size_t)(2*n)*sizeof(int));if(!bigA||!bigB||!bigOut){puts("Memory allocation failed");free(bigA);free(bigB);free(bigOut);return 1;}for(i=0;i<n;i++){bigA[i]=2*(n-i);bigB[i]=2*(n-i)-1;}start=clock();merge_desc(bigA,n,bigB,n,bigOut,&cmp);printf("m=n=%d: comparisons=%lld, time=%.6fs, sorted=%s\n",n,cmp,(double)(clock()-start)/CLOCKS_PER_SEC,descending(bigOut,2*n)?"yes":"no");free(bigA);free(bigB);free(bigOut);}return 0;}
